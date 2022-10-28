@@ -1,0 +1,181 @@
+<html>
+    <head>
+    <title>Zudusī Latvija</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="tabLogo.png">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    
+    <body onload="loadXMLDoc()">
+        <section>
+            <header>
+                <a href="index.html"><img src="logo.png" class="logo"></a>
+                
+                <div>
+                    <nav>
+                        <ul>
+                            <li><a href="index.html"></a></li>
+                            <li><a href="index.html">Sākums</a></li>
+                            <li><a href="index.html">Kontakti</a></li>
+                            <li><a href="index.html">Karte</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="izvelne" class="col-s-8 col-m-8 col-l-3 col-xl-2">
+                <ul>
+                    <li>Jēkabpils</li>
+                    <li>Aizkraukle</li>
+                    <li>Aizpute</li>
+                    <li>Aknīste</li>
+                    <li>Aloja</li>
+                    <li>Alūksne</li>
+                    <li>Ape</li>
+                    <li>Auce</li>
+                    <li>Baldone</li>
+                    <li>Baloži</li>
+                    <li>Balvi</li>
+                    <li>Bauska</li>
+                    <li>Brocēni</li>
+                    <li>Cēsis</li>
+                    <li>Cesvaine</li>
+                    <li>Dagda</li>
+                    <li>Daugavpils</li>
+                    <li>Dobele</li>
+                    <li>Durbe</li>
+                    <li>Grobiņa</li>
+                    <li>Gulbene</li>
+                    <li>Ikšķile</li>
+                    <li>Ilūkste</li>
+                    <li>Jaunjelgava</li>
+                    <li>Jēkabpils</li>
+                    <li>Jelgava</li>
+                    <li>Jūrmala</li>
+                    <li>Kandava</li>
+                    <li>Kārsava</li>
+                    <li>Ķegums</li>
+                    <li>Krāslava</li>
+                    <li>Kuldīga</li>
+                    <li>Lielvārde</li>
+                    <li>Liepāja</li>
+                    <li>Līgatne</li>
+                    <li>Limbaži</li>
+                    <li>Līvāni</li>
+                    <li>Lubāna</li>
+                    <li>Ludza</li>
+                    <li>Madona</li>
+                    <li>Mazsalaca</li>
+                    <li>Ogre</li>
+                    <li>Olaine</li>
+                    <li>Pāvilosta</li>
+                    <li>Piltene</li>
+                    <li>Pļaviņas</li>
+                    <li>Preiļi</li>
+                    <li>Priekule</li>
+                    <li>Rēzekne</li>
+                    <li>Rīga</li>
+                    <li>Rūjiena</li>
+                    <li>Sabile</li>
+                    <li>Salacgrīva</li>
+                    <li>Salaspils</li>
+                    <li>Saldus</li>
+                    <li>Saulkrasti</li>
+                    <li>Seda</li>
+                    <li>Sigulda</li>
+                    <li>Skrunda</li>
+                    <li>Smiltene</li>
+                    <li>Staicele</li>
+                    <li>Stende</li>
+                    <li>Strenči</li>
+                    <li>Subate</li>
+                    <li>Talsi</li>
+                    <li>Tukums</li>
+                    <li>Valdemārpils</li>
+                    <li>Valka</li>
+                    <li>Valmiera</li>
+                    <li>Vangaži</li>
+                    <li>Varakļāni</li>
+                    <li>Ventspils</li>
+                    <li>Viesīte</li>
+                    <li>Viļaka</li>
+                    <li>Viļāni</li>
+                    <li>Zilupe</li>
+                </ul>
+            </div>
+            
+            <div class="karte">
+            
+            <div id="googleMap" style="width:100%;height:100%;"></div>
+
+            <p id="demo"></p>
+
+            <script>
+                var points = [], title, place;
+                function loadXMLDoc() {
+                    var xmlhttp = new XMLHttpRequest();
+                    xmlhttp.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            myFunction(this);
+                        }
+                    };
+                    xmlhttp.open("GET", "metadata.xml", true);
+                    xmlhttp.send();
+                }
+
+                function myFunction(xml) {
+                    var x, i, xmlDoc, txt;
+                    xmlDoc = xml.responseXML;
+                    x = xmlDoc.getElementsByTagName("point");
+                    txt = x[0].childNodes[0].nodeValue;
+                    points = txt.split(",");
+                    x = xmlDoc.getElementsByTagName("title");
+                    title = x[0].childNodes[0].nodeValue;
+                    x = xmlDoc.getElementsByTagName("geographicName");
+                    place = x[1].childNodes[0].nodeValue;
+                    // document.getElementById("demo").innerHTML = title;
+                    
+                    myMap();
+                }
+                
+                function myMap() {
+                    var mapProp= {
+                        center:new google.maps.LatLng(56.946285, 24.105078),
+                        zoom:7,
+                    };
+                    
+                    var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+                    
+                    var contentString = '<div id="content">'+'<h1 id="firstHeading" class="firstHeading">'+title+'</h1>'+'<div id="siteNotice">'+'<p>'+place+'</p>'+"</div>" +"</div>";
+                    
+                    var infoWindow = new google.maps.InfoWindow({
+                        content: contentString,
+                        arialLabel: title
+                    });
+                    
+                    var marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(points[0], points[1]),
+                        map,
+                        title: title,
+                        type: "info"
+                    });
+                    
+                    marker.addListener("click", () => {
+                        infoWindow.open({
+                            anchor: marker,
+                            map: map
+                        });
+                    });
+                }
+            </script>
+
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDXQeIxMk7c-ML_OOFOu7tkVYQWS4T5hRs&callback=myMap"></script>
+            </div>
+            
+            <footer class="apaksa">
+                JAK &copy; 2022
+            </footer>
+        </section>
+    </body>
+
+</html>
